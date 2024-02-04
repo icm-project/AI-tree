@@ -6,7 +6,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import BackgroundImage from 'assets/background-gradiant3.jpg';
 
 function Home() {
-  const [impress, setImpress] = useState<any>();
+  const [impress, setImpress] = useState<any>(null);
   const [openInitialDialog, setOpenInitialDialog] = useState(true);
 
   useEffect(() => {
@@ -14,8 +14,16 @@ function Home() {
     if (impress) {
       impress.init();
       setImpress(impress);
+      setInterval(() => {
+        window.location.href = '/';
+      }, 5 * 60 * 1000);
     }
   }, [])
+
+  const onClickHomeButton = (impress: any) => {
+    impress.goto('OverallView', 1000);
+    setOpenInitialDialog(true);
+  }
 
   return (
     <Fragment>
@@ -73,9 +81,9 @@ function Home() {
           return <Step key={stepData.id} {...stepData} />
         })}
       </div>
-      <script type="text/javascript" src="/js/impress.js" />
+      <script type="text/javascript" src={process.env.NODE_ENV === 'development' ? "/js/impress.js" : "/AI-tree/js/impress.js"} />
       <Box display={openInitialDialog ? 'none' : 'inherit'}>
-        <IconButton disableRipple size="large" onClick={() => impress.goto('OverallView', 1000)}>
+        <IconButton disableRipple size="large" onClick={() => onClickHomeButton(impress)}>
           <HomeIcon sx={{ fontSize: 50 }} />
         </IconButton>
         <Button
